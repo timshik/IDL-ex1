@@ -33,10 +33,9 @@ reversed_amino_vocab = amino_vocab = {
 }
 
 # find the best input possible for the net
-def find_perfect_input(model, learning_rate, num_steps=5):
+def find_perfect_input(model,input, learning_rate, num_steps=5):
 
     loss = nn.BCELoss()
-    input = torch.randn(180, requires_grad=True)
     target = Variable(torch.tensor([1.]), requires_grad=False)
     optimizer = torch.optim.SGD([input], lr=learning_rate)
     for i in range(num_steps):
@@ -62,7 +61,11 @@ def convert_input_to_peptide(input):
     return input, peptide
 
 
-input, peptide = convert_input_to_peptide(find_perfect_input(pre_trained_model, 1, 20))
-output = pre_trained_model.forward(torch.tensor(input, requires_grad=False))
-print(f' the peptide is {peptide} and its score in the model is: {output.item()}')
+def optimize_sequence(input):
+    input, peptide = convert_input_to_peptide(find_perfect_input(pre_trained_model, input, 1, 20))
+    output = pre_trained_model.forward(torch.tensor(input, requires_grad=False))
+    print(f' the peptide is {peptide} and its score in the model is: {output.item()}')
 
+
+input = torch.randn(180, requires_grad=True)
+optimize_sequence(input)

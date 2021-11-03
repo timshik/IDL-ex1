@@ -17,6 +17,7 @@ path_neg = 'neg_A0201.txt'
 tr_batch_size = 16
 test_batch_size = 32
 
+# get the data shuffle it and split it to test/train
 mydata = ProcessData(path_pos, path_neg)
 mydata.shuffle()
 mydata.split_train_test()
@@ -61,7 +62,7 @@ def get_weights(data, x=1.0, y=1.0):#x will represent the factor of the weight o
 #loading the data to loaders
 weights = get_weights(trainset, 1.3, 0.8)
 sampler = torch.utils.data.sampler.WeightedRandomSampler(weights, len(trainset), replacement=True)
-trainloader = torch.utils.data.DataLoader(trainset, batch_size=tr_batch_size, shuffle=False, sampler=sampler)#, sampler=sampler
+trainloader = torch.utils.data.DataLoader(trainset, batch_size=tr_batch_size, shuffle=False, sampler=sampler)
 testloader = torch.utils.data.DataLoader(testset, batch_size=test_batch_size, shuffle=False)
 count_labels(iter(trainloader), num_of_examples)
 count_labels(iter(testloader), len(testloader)*test_batch_size)
@@ -108,11 +109,10 @@ def train(model, trainloader, testloader, loss, optimizer, epochs):
 # actual train
 model = SimpleModel()
 loss = nn.BCELoss()
-optimizer = torch.optim.Adam(model.parameters(), lr=0.00065, betas=(0.9, 0.999), eps=1e-08, weight_decay=1e-3, amsgrad=False) #weight_decay=1e-5,
-#optimizer = torch.optim.SGD(model.parameters(), lr=0.001, nesterov=False)
+optimizer = torch.optim.Adam(model.parameters(), lr=0.00065, betas=(0.9, 0.999), eps=1e-08, weight_decay=1e-3, amsgrad=False)
 tr_losses, dev_losses = train(model, trainloader, testloader, loss, optimizer, 15)
 
-# plottind the losses
+# plotting the losses
 # the dev bar might be below the train bar due to the diffrent distribution of the dev set
 iteration = np.arange(0, len(tr_losses))
 plt.plot(iteration, tr_losses, 'g-', iteration, dev_losses, 'r-')

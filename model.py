@@ -37,3 +37,17 @@ class SimpleModel(nn.Module):
         checkpoint = torch.load(path)
         self.load_state_dict(checkpoint['model_state_dict'])
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+

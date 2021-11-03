@@ -92,6 +92,9 @@ class ProcessData:
     def get_test_data(self):
         return np.array(list(zip(self.X_test, self.Y_test)), dtype=object)
 
+    def get_data(self):
+        return np.array(list(zip(self.data, self.labels)), dtype=object)
+
     def shuffle(self):
         p = np.random.permutation(len(self.data))
         self.labels = self.labels[p]
